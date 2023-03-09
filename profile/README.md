@@ -7,14 +7,17 @@
     participant Local router
     participant Rendezvous service
     participant Polaris service
-    device->>Local router: DHCP opt. 60
-    Local router->>device: HTTP Boot URL
-    device->>Polaris service: HTTP Boot request
-    Polaris service->>device: POS UKI boot image
-    device->>Rendezvous service: device key
-    Rendezvous service->>device: Polaris waiting room authorization
-    device->>Polaris service: Request profile
-    Polaris service->>device: Profile URL
+    participant Owner service
+    device->>+Local router: DHCP opt. 60
+    Local router->>-device: HTTP Boot URL
+    device->>+Polaris service: HTTP Boot request
+    Polaris service->>-device: Secure boot signed UOS boot image
+    device->>+Rendezvous service: Request owner service URL (FDO T01)
+    Rendezvous service->>-device: Owner service URL
+    device->>+Owner service: Provisioning secrets (FDO T02)
+    Owner service->>-device: Polaris waiting room credentials
+    device->>+Polaris service: Request profile/join waiting room
+    Polaris service->>-device: Profile URL
     device->>device: Device executes<br/>profile
 ```
 
